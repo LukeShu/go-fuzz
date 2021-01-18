@@ -20,10 +20,13 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-//go:generate go build github.com/dvyukov/go-fuzz/go-fuzz/vendor/github.com/elazarl/go-bindata-assetfs/go-bindata-assetfs
-//go:generate ./go-bindata-assetfs assets/...
+//go:generate touch --no-create --date=@1493765145 assets/bootstrap-theme.min.css
+//go:generate touch --no-create --date=@1493765145 assets/bootstrap.min.css
+//go:generate touch --no-create --date=@1493765145 assets/bootstrap.min.js
+//go:generate touch --no-create --date=@1493765145 assets/jquery.min.js
+//go:generate touch --no-create --date=@1550787301 assets/stats.html
+//go:generate go-bindata-assetfs assets/...
 //go:generate goimports -w bindata_assetfs.go
-//go:generate rm go-bindata-assetfs
 
 var (
 	flagWorkdir           = flag.String("workdir", ".", "dir with persistent work data")
