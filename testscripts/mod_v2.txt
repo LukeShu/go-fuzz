@@ -5,7 +5,7 @@
 
 # Enter a module that depends on a v2+ module.
 # Note that we are outside of GOPATH, so the presence of the 'go.mod' here will
-# enable module-module for cmd/go (which is true in Go 1.11-1.13, and likely will be true in 1.14 as well).
+# enable module-module for cmd/go (which is true in Go 1.11-1.15, and likely will be true in 1.16 as well).
 cd foo 
 
 # Sanity check the module seems well formed.

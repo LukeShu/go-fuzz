@@ -66,8 +66,8 @@ func basePackagesConfig() *packages.Config {
 	// we are still setting up a GOPATH to build, so we later will force
 	// GO111MODULE to be off when building so that we are in GOPATH mode.
 	// If the user has not set GO111MODULE, the meaning here is
-	// left up to cmd/go (defaulting to 'auto' in Go 1.11-1.13,
-	// but likely defaulting to 'on' at some point during Go 1.14
+	// left up to cmd/go (defaulting to 'auto' in Go 1.11-1.15,
+	// but likely defaulting to 'on' at some point during Go 1.16
 	// development cycle).
 	// Also note that we are leaving the overall cfg structure
 	// in place to support future experimentation, etc.

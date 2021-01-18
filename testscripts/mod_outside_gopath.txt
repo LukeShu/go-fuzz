@@ -13,7 +13,7 @@ cd foo
 cp go.mod_PRISTINE go.mod
 
 # First, we test with GO111MODULE=auto, which is the default
-# in Go 1.11-1.13. (In 1.14, the default will likely be GO111MODULE=on).
+# in Go 1.11-1.15.  (In 1.16, the default will likely be GO111MODULE=on).
 env GO111MODULE=auto
 
 # Sanity check the module seems well formed.
@@ -23,7 +23,7 @@ exec go build
 
 # Because we are outside GOPATH, the presence of the 'go.mod' here will
 # enable module-module for cmd/go with GO111MODULE=auto.
-# This is true in Go 1.11-1.13, and likely will be true in 1.14 as well.
+# This is true in Go 1.11-1.15, and likely will be true in 1.16 as well.
 # Ask go-fuzz-build to build, including specifying the fuzz function for mod.
 exec go-fuzz-build -func=FuzzMod
 exists foo-fuzz.zip
@@ -39,7 +39,7 @@ stderr 'workers: \d+, corpus: '
 cp go.mod_PRISTINE go.mod
 rm foo-fuzz.zip
 
-# Second, we test with GO111MODULE=on, which will likely be the default in Go 1.14.
+# Second, we test with GO111MODULE=on, which will likely be the default in Go 1.16.
 env GO111MODULE=on
 
 # Sanity check we can still interact with the module.
@@ -60,8 +60,8 @@ cp go.mod_PRISTINE go.mod
 rm foo-fuzz.zip
 
 # Third, we test with GO111MODULE unset.
-# The meaning of this will likely change in Go 1.14, but given we are 
-# outside of GOPATH, in theory these steps will still work even in Go 1.14.
+# The meaning of this will likely change in Go 1.16, but given we are 
+# outside of GOPATH, in theory these steps will still work even in Go 1.16.
 env GO111MODULE=
 
 # Sanity check we can still interact with the module.
@@ -82,7 +82,7 @@ cp go.mod_PRISTINE go.mod
 rm foo-fuzz.zip
 
 # Fourth, we test with GO111MODULE=off.
-# The meaning of this is unlikely to change in Go 1.14,
+# The meaning of this is unlikely to change in Go 1.16,
 # altough in some (distant?) future, GO111MODULE=off might
 # no longer be supported.
 env GO111MODULE=off

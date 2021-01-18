@@ -7,21 +7,30 @@
 
 language: go
 
-# Test Go 1.12 - 1.14; across linux, osx, and windows
+# - Test Go 1.12 - 1.15 across linux, osx, and windows.
+# - Test Go tip across linux and osx (Travis-CI doesn't support Go tip on windows) (and explicitly set
+#   GO111MODULE=auto and GOFLAGS=-mod=mod for tip, as the defaults for Go 1.16 are slated to change to "on"
+#   and "readonly" respectively... nevermind the possibility that the meaning of "auto" changes later
+#   on...).
 matrix:
   include:
     # linux
     - { os: "linux", go: "1.12.x" }
     - { os: "linux", go: "1.13.x" }
     - { os: "linux", go: "1.14.x" }
+    - { os: "linux", go: "1.15.x" }
+    - { os: "linux", go: "tip", env: [ "GO111MODULE=auto", "GOFLAGS=-mod=mod" ] }
     # linux
     - { os: "osx", go: "1.12.x" }
     - { os: "osx", go: "1.13.x" }
     - { os: "osx", go: "1.14.x" }
+    - { os: "osx", go: "1.15.x" }
+    - { os: "osx", go: "tip", env: [ "GO111MODULE=auto", "GOFLAGS=-mod=mod" ] }
     # windows
     - { os: "windows", go: "1.12.x" }
     - { os: "windows", go: "1.13.x" }
     - { os: "windows", go: "1.14.x" }
+    - { os: "windows", go: "1.15.x" }
 
 # Install coreutils for the 'timeout(1)' utility on windows and osx.
 before_install:
@@ -40,17 +49,17 @@ script:
   # Sanity check that the 'testscript' cmd seems to function at all.
   # If all the testscripts fail, this is a good one to troubleshoot first.
   - cd $GOPATH/src/github.com/dvyukov/go-fuzz
-  - testscript -v testscripts/fuzz_help.txt
+  - testscript -v -e GOFLAGS testscripts/fuzz_help.txt
 
   # Run our tests for fuzzing modules.
   # If multiple modules testcripts fail, probably makes sense to start by troubleshooting
   # the earliest failing testscript.
   # TODO: probably makes more sense to move this further down, but place here for now for faster iterations.
-  - testscript -v testscripts/mod_go_fuzz_dep.txt
-  - testscript -v testscripts/mod_outside_gopath.txt
-  - testscript -v testscripts/mod_inside_gopath.txt
-  - testscript -v testscripts/mod_v2.txt
-  - testscript -v testscripts/mod_vendor.txt
+  - testscript -v -e GOFLAGS testscripts/mod_go_fuzz_dep.txt
+  - testscript -v -e GOFLAGS testscripts/mod_outside_gopath.txt
+  - testscript -v -e GOFLAGS testscripts/mod_inside_gopath.txt
+  - testscript -v -e GOFLAGS testscripts/mod_v2.txt
+  - testscript -v -e GOFLAGS testscripts/mod_vendor.txt
 
   # Prepare to test the png example from dvyukov/go-fuzz-corpus.
   - go get -v -d github.com/dvyukov/go-fuzz-corpus/png

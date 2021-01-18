@@ -3,9 +3,9 @@
 
 # Here, we purposefully do not test with GO111MODULE auto and unset,
 # because the meaning of auto within GOPATH has changed with
-# Go 1.13, and the meaning of unset will likely change in Go 1.14
-# (and some chance auto could change meaning again in Go 1.14).
-# However, the Go 1.13 and 1.14 changes ultimately translate
+# Go 1.13, and the meaning of unset will likely change in Go 1.16
+# (and some chance auto could change meaning again).
+# However, the Go 1.13 and 1.16 changes ultimately translate
 # to what external conditions enable or disable module mode
 # for cmd/go. Testing here with GO111MODULE on and off allows
 # us to explicitly test with cmd/go's module mode enabled and disabled in GOPATH,
@@ -25,7 +25,7 @@ cd gopath/src/example.com/foo
 # Copy a pristine go.mod file.
 cp go.mod_PRISTINE go.mod
 
-# First, we test with GO111MODULE=on, which will likely be the default in Go 1.14.
+# First, we test with GO111MODULE=on, which will likely be the default in Go 1.16.
 env GO111MODULE=on
 
 # Sanity check the module seems well formed.
@@ -49,8 +49,8 @@ cp go.mod_PRISTINE go.mod
 rm foo-fuzz.zip
 
 # Second, we test with GO111MODULE=off.
-# The meaning of this is unlikely to change in Go 1.14,
-# altough in some (distant?) future, GO111MODULE=off might
+# The meaning of this is unlikely to change in Go 1.16,
+# although in some (distant?) future, GO111MODULE=off might
 # no longer be supported.
 env GO111MODULE=off
 
