@@ -9,9 +9,7 @@ language: go
 
 # - Test Go 1.12 - 1.15 across linux, osx, and windows.
 # - Test Go tip across linux and osx (Travis-CI doesn't support Go tip on windows) (and explicitly set
-#   GO111MODULE=auto and GOFLAGS=-mod=mod for tip, as the defaults for Go 1.16 are slated to change to "on"
-#   and "readonly" respectively... nevermind the possibility that the meaning of "auto" changes later
-#   on...).
+#   GOFLAGS=-mod=mod for tip, as the default for Go 1.16 is slated to change to "readonly").
 matrix:
   include:
     # linux
@@ -19,13 +17,13 @@ matrix:
     - { os: "linux", go: "1.13.x" }
     - { os: "linux", go: "1.14.x" }
     - { os: "linux", go: "1.15.x" }
-    - { os: "linux", go: "tip", env: [ "GO111MODULE=auto", "GOFLAGS=-mod=mod" ] }
+    - { os: "linux", go: "tip", env: [ "GOFLAGS=-mod=mod" ] }
     # linux
     - { os: "osx", go: "1.12.x" }
     - { os: "osx", go: "1.13.x" }
     - { os: "osx", go: "1.14.x" }
     - { os: "osx", go: "1.15.x" }
-    - { os: "osx", go: "tip", env: [ "GO111MODULE=auto", "GOFLAGS=-mod=mod" ] }
+    - { os: "osx", go: "tip", env: [ "GOFLAGS=-mod=mod" ] }
     # windows
     - { os: "windows", go: "1.12.x" }
     - { os: "windows", go: "1.13.x" }
@@ -37,7 +35,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install gnuwin32-coreutils.install; fi
   - go get -u github.com/rogpeppe/go-internal/cmd/testscript
 
-# Set the import path (including to help with forks).
+# Set the import path (so that Travis-CI checks out the repo at a
+# known path that we can 'cd' to below; to help with GitHub forks).
 go_import_path: github.com/dvyukov/go-fuzz
 
 script:
@@ -48,7 +47,6 @@ script:
 
   # Sanity check that the 'testscript' cmd seems to function at all.
   # If all the testscripts fail, this is a good one to troubleshoot first.
-  - cd $GOPATH/src/github.com/dvyukov/go-fuzz
   - testscript -v -e GOFLAGS testscripts/fuzz_help.txt
 
   # Run our tests for fuzzing modules.
@@ -62,7 +60,7 @@ script:
   - testscript -v -e GOFLAGS testscripts/mod_vendor.txt
 
   # Prepare to test the png example from dvyukov/go-fuzz-corpus.
-  - go get -v -d github.com/dvyukov/go-fuzz-corpus/png
+  - GO111MODULE=off go get -v -d github.com/dvyukov/go-fuzz-corpus/png
   - cd $GOPATH/src/github.com/dvyukov/go-fuzz-corpus/
   - cd png
   - ls -l
